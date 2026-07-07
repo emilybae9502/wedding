@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이노BTI — 나는 어떤 이노션 사람인가?</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E2001A;
+  --red-dark: #b50015;
+  --red-glow: rgba(226,0,26,0.12);
+  --black: #0d0d0d;
+  --white: #ffffff;
+  --gray1: #161616;
+  --gray2: #222222;
+  --gray3: #555;
+  --gray4: #888;
+  --border: #272727;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--black);
+  color:var(--white);
+  font-family:'Noto Sans KR',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::after {
+  content:'';
+  position:fixed;
+  top:-30%; right:-10%;
+  width:55%; height:160%;
+  background:linear-gradient(150deg,transparent 40%,rgba(226,0,26,0.025) 40%,rgba(226,0,26,0.025) 60%,transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+.wrap { max-width:680px; margin:0 auto; padding:0 22px 100px; position:relative; z-index:1; }
+
+/* SCREENS */
+.screen { display:none; }
+.screen.on { display:block; animation:rise .42s cubic-bezier(.22,1,.36,1); }
+@keyframes rise { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+/* TOP BAR */
+.bar { display:flex; align-items:center; justify-content:space-between; padding:26px 0 0; margin-bottom:44px; }
+.logo { font-family:'Bebas Neue',sans-serif; font-size:21px; letter-spacing:3px; }
+.logo em { color:var(--red); font-style:normal; }
+.bar-sub { font-size:10px; letter-spacing:2px; color:var(--gray4); }
+
+/* INTRO */
+.eyebrow { font-size:10px; letter-spacing:4px; color:var(--red); font-weight:700; margin-bottom:14px; }
+.hero-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(70px,17vw,116px);
+  line-height:.88;
+  letter-spacing:-1px;
+  margin-bottom:6px;
+}
+.hero-title em { color:var(--red); font-style:normal; }
+.hero-sub { font-size:14px; color:var(--gray4); font-weight:300; line-height:1.85; margin-bottom:44px; word-break:keep-all; }
+
+.stats { display:flex; border:1px solid var(--border); margin-bottom:36px; overflow:hidden; }
+.stat { flex:1; padding:18px 12px; border-right:1px solid var(--border); text-align:center; }
+.stat:last-child { border-right:none; }
+.stat-n { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--red); line-height:1; }
+.stat-l { font-size:9px; color:var(--gray4); letter-spacing:1.5px; margin-top:4px; }
+
+.btn-start {
+  display:block; width:100%; padding:21px;
+  background:var(--red); color:var(--white);
+  font-family:'Bebas Neue',sans-serif; font-size:21px; letter-spacing:4px;
+  border:none; cursor:pointer; position:relative; overflow:hidden; transition:background .15s;
+}
+.btn-start::before {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
+  transition:left .4s;
+}
+.btn-start:hover::before { left:100%; }
+.btn-start:hover { background:var(--red-dark); }
+.btn-start:active { transform:scale(.99); }
+
+.types-label { font-size:9px; letter-spacing:3px; color:var(--gray4); margin:44px 0 14px; display:flex; align-items:center; gap:10px; }
+.types-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.tgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
+.tchip { background:var(--gray1); border:1px solid var(--border); padding:12px 6px; text-align:center; cursor:pointer; transition:all .17s; }
+.tchip:hover { border-color:var(--red); background:var(--red-glow); }
+.tchip-e { font-size:18px; }
+.tchip-c { font-family:'Bebas Neue',sans-serif; font-size:12px; color:var(--red); letter-spacing:1px; margin-top:4px; }
+.tchip-n { font-size:9px; color:var(--gray4); margin-top:2px; line-height:1.3; }
+
+/* QUIZ */
+.qbar { display:flex; align-items:center; justify-content:space-between; padding:26px 0 22px; }
+.qcount { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:3px; color:var(--gray4); }
+.qcount strong { color:var(--red); font-size:19px; }
+.prog { height:2px; background:var(--border); margin-bottom:36px; }
+.prog-f { height:100%; background:var(--red); transition:width .4s cubic-bezier(.4,0,.2,1); }
+.qscene { font-size:10px; letter-spacing:3px; color:var(--red); font-weight:700; margin-bottom:10px; }
+.qemoji { font-size:42px; display:block; margin-bottom:12px; }
+.qtxt { font-size:clamp(17px,4.2vw,23px); font-weight:900; line-height:1.38; margin-bottom:30px; word-break:keep-all; }
+.opts { display:flex; flex-direction:column; gap:9px; }
+.opt {
+  display:flex; align-items:flex-start; gap:14px; padding:19px 18px;
+  background:var(--gray1); border:1px solid var(--border);
+  color:var(--white); font-family:'Noto Sans KR',sans-serif;
+  font-size:14px; font-weight:400; line-height:1.65;
+  text-align:left; cursor:pointer; transition:all .17s; word-break:keep-all;
+}
+.opt:hover { border-color:var(--red); background:var(--red-glow); transform:translateX(4px); }
+.opt.sel { border-color:var(--red); background:var(--red-glow); }
+.opt-l { font-family:'Bebas Neue',sans-serif; font-size:19px; color:var(--red); min-width:18px; line-height:1.45; }
+
+/* LOADING */
+.load-wrap { text-align:center; padding:110px 0; }
+.load-txt { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:6px; color:var(--red); }
+.load-bar { width:180px; height:2px; background:var(--border); margin:22px auto 0; overflow:hidden; }
+.load-bar-f { height:100%; background:var(--red); width:0; animation:lf 2.1s ease forwards; }
+@keyframes lf { 0%{width:0} 60%{width:72%} 90%{width:93%} 100%{width:100%} }
+
+/* RESULT */
+.r-top { padding:32px 0 0; }
+.r-eye { font-size:9px; letter-spacing:4px; color:var(--red); font-weight:700; margin-bottom:10px; }
+.r-code { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,15vw,96px); line-height:.9; letter-spacing:7px; }
+.r-emoji { font-size:58px; display:block; margin:10px 0 7px; }
+.r-name { font-weight:900; font-size:clamp(20px,5vw,30px); }
+.r-tag { font-size:12px; color:var(--red); font-weight:700; letter-spacing:1px; margin-top:7px; }
+.r-div { height:1px; background:var(--border); margin:26px 0; }
+.r-desc { font-size:14px; line-height:1.95; color:#b0acb8; word-break:keep-all; }
+
+.tgrid2 { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:22px; }
+.tcard { background:var(--gray1); border:1px solid var(--border); padding:14px; }
+.tcard-l { font-size:9px; letter-spacing:2px; color:var(--gray4); margin-bottom:5px; }
+.tcard-v { font-size:13px; font-weight:700; word-break:keep-all; }
+
+.sec { margin-top:22px; background:var(--gray1); border:1px solid var(--border); padding:22px; }
+.sec-eye { font-size:9px; letter-spacing:3px; color:var(--gray4); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+.sec-eye::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.axwrap { margin-bottom:16px; }
+.axtop { display:flex; justify-content:space-between; font-size:10px; color:var(--gray4); margin-bottom:5px; }
+.axtrack { height:4px; background:var(--border); overflow:hidden; }
+.axfill { height:100%; background:var(--red); transition:width .85s cubic-bezier(.4,0,.2,1) .35s; }
+
+.crow { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+.tg { padding:6px 13px; background:rgba(0,200,120,.07); border:1px solid rgba(0,200,120,.38); color:#00c878; font-size:11px; font-weight:700; }
+.tb { padding:6px 13px; background:var(--red-glow); border:1px solid rgba(226,0,26,.38); color:var(--red); font-size:11px; font-weight:700; }
+
+.sbox { margin-top:22px; background:var(--gray1); border:1px solid var(--border); padding:22px; }
+.srow { display:flex; gap:8px; margin-bottom:10px; }
+.sinput { flex:1; background:var(--black); border:1px solid var(--border); padding:11px 13px; color:var(--gray4); font-size:12px; font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+.btn-copy { padding:11px 18px; background:var(--red); color:var(--white); border:none; font-size:11px; font-weight:700; cursor:pointer; letter-spacing:1px; white-space:nowrap; transition:background .15s; }
+.btn-copy:hover { background:var(--red-dark); }
+.btn-copy.ok { background:#00c878; }
+.sbtns { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.sbtn { padding:13px; background:var(--black); border:1px solid var(--border); color:var(--white); font-size:12px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:all .15s; }
+.sbtn:hover { border-color:var(--red); color:var(--red); }
+.btn-retry { display:block; width:100%; margin-top:9px; padding:14px; background:transparent; border:1px solid var(--border); color:var(--gray4); font-size:10px; letter-spacing:3px; cursor:pointer; transition:all .15s; }
+.btn-retry:hover { border-color:var(--white); color:var(--white); }
+.btn-all { display:block; width:100%; margin-top:7px; padding:13px; background:transparent; border:1px solid var(--border); color:var(--gray4); font-size:10px; letter-spacing:2px; cursor:pointer; transition:all .15s; }
+.btn-all:hover { color:var(--white); border-color:var(--gray3); }
+
+@media(max-width:480px){
+  .tgrid2{grid-template-columns:1fr}
+  .tgrid{grid-template-columns:repeat(4,1fr)}
+  .sbtns{grid-template-columns:1fr}
+  .stats{flex-wrap:wrap}
+  .stat{min-width:50%;border-bottom:1px solid var(--border)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- INTRO -->
+<div class="screen on" id="s-intro">
+  <div class="bar">
+    <div class="logo">INNO<em>BTI</em></div>
+    <div class="bar-sub">INNOCEAN × 2025</div>
+  </div>
+  <div class="eyebrow">PERSONALITY TEST FOR INNOCEAN PEOPLE</div>
+  <div class="hero-title">이노<br><em>BTI</em></div>
+  <p class="hero-sub">나는 이노션에서 어떤 사람인가?<br>15개의 질문으로 알아보는 나의 이노션 DNA</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-n">16</div><div class="stat-l">이노션 유형</div></div>
+    <div class="stat"><div class="stat-n">15</div><div class="stat-l">질문 수</div></div>
+    <div class="stat"><div class="stat-n">5분</div><div class="stat-l">소요 시간</div></div>
+    <div class="stat"><div class="stat-n">Only</div><div class="stat-l">이노션 한정</div></div>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">테스트 시작하기 →</button>
+  <div class="types-label">16가지 이노션 유형</div>
+  <div class="tgrid" id="intro-grid"></div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="s-quiz">
+  <div class="qbar">
+    <div class="logo">INNO<em style="color:var(--red)">BTI</em></div>
+    <div class="qcount"><strong id="qnum">1</strong> / 15</div>
+  </div>
+  <div class="prog"><div class="prog-f" id="prog-f"></div></div>
+  <div class="qscene" id="qscene"></div>
+  <span class="qemoji" id="qemoji"></span>
+  <div class="qtxt" id="qtxt"></div>
+  <div class="opts" id="opts"></div>
+</div>
+
+<!-- LOADING -->
+<div class="screen" id="s-load">
+  <div style="padding-top:26px"><div class="logo">INNO<em style="color:var(--red)">BTI</em></div></div>
+  <div class="load-wrap">
+    <div class="load-txt" id="load-msg">ANALYZING...</div>
+    <div class="load-bar"><div class="load-bar-f"></div></div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="s-result">
+  <div class="bar">
+    <div class="logo">INNO<em style="color:var(--red)">BTI</em></div>
+    <div class="bar-sub">YOUR TYPE</div>
+  </div>
+  <div class="r-top">
+    <div class="r-eye">당신의 이노BTI 유형은</div>
+    <div class="r-code" id="r-code"></div>
+    <span class="r-emoji" id="r-emoji"></span>
+    <div class="r-name" id="r-name"></div>
+    <div class="r-tag" id="r-tag"></div>
+  </div>
+  <div class="r-div"></div>
+  <p class="r-desc" id="r-desc"></p>
+  <div class="tgrid2" id="r-traits"></div>
+  <div class="sec" id="r-axes"></div>
+  <div class="sec">
+    <div class="sec-eye">찰떡 케미</div>
+    <div class="crow" id="r-good"></div>
+    <div class="sec-eye" style="margin-top:18px">극과 극 케미</div>
+    <div class="crow" id="r-bad"></div>
+  </div>
+  <div class="sbox">
+    <div class="sec-eye">결과 공유하기</div>
+    <div class="srow">
+      <input class="sinput" id="share-url" readonly>
+      <button class="btn-copy" id="btn-copy" onclick="copyLink()">복사</button>
+    </div>
+    <div class="sbtns">
+      <button class="sbtn" onclick="shareKakao()">💬 카카오 공유</button>
+      <button class="sbtn" onclick="shareX()">𝕏 X 공유</button>
+    </div>
+  </div>
+  <button class="btn-retry" onclick="startQuiz()">↺ 다시 테스트하기</button>
+  <button class="btn-all" onclick="goIntro()">← 모든 유형 보기</button>
+</div>
+
+</div>
+<script>
+/* =====================
+   16 TYPES
+===================== */
+const T = {
+  VISP:{code:'VISP',emoji:'🏔️',name:'그랜드 스트래티지스트',tag:'"10년 뒤를 보고 오늘을 기획합니다"',
+    desc:'빅픽처를 그리는 것이 DNA인 전략가. 브리프를 받는 순간 이미 전례 없는 방향이 10개 떠오르는 사람. 광고 문법을 깨는 아이디어일수록 더 흥분하고, 클라이언트가 무서워할수록 오히려 더 하고 싶어집니다. "이미 해봤어요"가 가장 싫은 말.',
+    traits:['핵심 역량: 장기 브랜드 전략','스타일: 독립적 사고·깊은 파고들기','스트레스: 단기 KPI 압박','명언: "방향이 맞으면 속도는 따라온다"'],
+    good:['VTCP','VTSE'],bad:['SOCO','NUBI']},
+
+  VICE:{code:'VICE',emoji:'🎭',name:'빅아이디어 메이커',tag:'"아무도 본 적 없는 걸 만들고 싶습니다"',
+    desc:'이노션 크리에이티브의 심장. 브리프를 받는 순간 전례 없는 방향이 10개 떠오르는 사람. 아무도 시도 안 한 방식을 가장 먼저 제안하고, 클라이언트가 무서워할수록 오히려 더 흥분합니다. "이미 해봤어요"가 가장 싫은 말.',
+    traits:['핵심 역량: 빅아이디어 발굴','스타일: 직관적·도전적','스트레스: "작년에도 이렇게 했어요"','명언: "Good is the enemy of great"'],
+    good:['VTCP','SPFE'],bad:['DACE','PACE']},
+
+  VTCP:{code:'VTCP',emoji:'🎬',name:'크리에이티브 디렉터',tag:'"내가 OK 해야 세상 밖으로 나갑니다"',
+    desc:'이노션 작업물의 최종 수호자. 수백 개 시안 중 단 하나를 골라내는 안목의 소유자. 칭찬은 아끼지만 결국 팀이 가장 신뢰하는 사람. 기준이 높다는 건 팀에 대한 존중입니다.',
+    traits:['핵심 역량: 크리에이티브 리더십','스타일: 기준이 높은 디렉팅','스트레스: 타협한 결과물','명언: "I\'ll know it when I see it"'],
+    good:['VTSE','VICE'],bad:['PACE','DACE']},
+
+  VTSE:{code:'VTSE',emoji:'📊',name:'이노션 스트래티지스트',tag:'"데이터 없는 전략은 직관이 아니라 도박입니다"',
+    desc:'소비자 인사이트를 전략으로 연결하는 두뇌. 브랜드와 문화를 연결하는 전략적 논리를 구축합니다. 팀원들이 "왜 이 방향인가"를 물을 때 항상 5개 이상의 근거를 준비해놨죠. 브리프가 책 한 권 분량입니다.',
+    traits:['핵심 역량: 캠페인 전략 기획','스타일: 논리·체계·인사이트','스트레스: 근거 없는 의사결정','명언: "Insight is everything"'],
+    good:['VTCP','VISP'],bad:['SOCO','NUBI']},
+
+  STDE:{code:'STDE',emoji:'🌍',name:'글로벌 캠페인 플래너',tag:'"로컬을 알아야 글로벌이 됩니다"',
+    desc:'이노션의 글로벌 DNA를 가장 잘 이해하는 사람. 복수의 나라에서 동시에 캠페인을 돌리는 복잡함을 즐기고, 문화 코드마다 다른 접근법을 설계합니다. 시차를 초월하는 건 기본입니다.',
+    traits:['핵심 역량: 글로벌 통합 캠페인','스타일: 다문화·장기 관점','스트레스: 로컬라이제이션 없는 글로컬','명언: "Think global, act local"'],
+    good:['VTCP','VISP'],bad:['SOCO','EVEN']},
+
+  SPFE:{code:'SPFE',emoji:'✏️',name:'카피라이터 시인',tag:'"한 줄이 세상을 바꿀 수 있습니다"',
+    desc:'카피 한 줄에 3일을 투자하는 언어의 장인. 단순한 아이디어 안에 감동을 압축하는 사람. 단어 하나하나의 무게를 알고, 침묵의 힘도 압니다. 갑이 "좀 더 직접적으로 써주세요"라고 하면 속으로 눈물을 흘립니다.',
+    traits:['핵심 역량: 카피라이팅·언어 전략','스타일: 감성적 장인','스트레스: "직접 설명하는" 카피 요청','명언: "Less is more"'],
+    good:['VTCP','VICE'],bad:['DACE','PACE']},
+
+  DACE:{code:'DACE',emoji:'📱',name:'디지털 퍼포먼스 파이터',tag:'"숫자가 거짓말하지 않습니다"',
+    desc:'ROAS와 CPM을 꿈에서도 외우는 이노션 디지털팀의 에이스. GA4 대시보드가 홈화면이고 A/B 테스트를 밥처럼 돌립니다. 데이터로 크리에이티브 효과를 증명해내는 것이 가장 짜릿합니다. "그래서 KPI가 뭐예요?"가 모든 회의의 시작.',
+    traits:['핵심 역량: 퍼포먼스 마케팅','스타일: 데이터 드리븐·속도전','스트레스: 추상적 목표','명언: "측정 못하면 관리도 못한다"'],
+    good:['PACE','VTSE'],bad:['VISP','SPFE']},
+
+  COSE:{code:'COSE',emoji:'🔬',name:'크리에이티브 사이언티스트',tag:'"왜 이게 통했는지 증명할 수 있습니다"',
+    desc:'크리에이티브와 데이터를 동시에 사랑하는 하이브리드 인재. 광고가 왜 통했는지 소비자 심리학적으로 설명할 수 있습니다. 크리에이티브와 성과를 동시에 입증하는 발표가 특기입니다.',
+    traits:['핵심 역량: 크리에이티브 전략','스타일: 분석적 창의','스트레스: 직관만의 결정','명언: "Art meets science"'],
+    good:['VTSE','DACE'],bad:['SPFE','EVEN']},
+
+  PACE:{code:'PACE',emoji:'🤝',name:'클라이언트 파트너 AE',tag:'"클라이언트 행복이 곧 나의 행복입니다"',
+    desc:'이노션의 얼굴이자 중심축. 어떤 무리한 요청도 "확인해볼게요!"로 시작하고, 모든 이메일에 "감사합니다"를 세 번 씁니다. 복잡한 멀티 스테이크홀더 프로젝트에서 모든 관계를 동시에 관리하는 외교관. 팀의 에너자이저.',
+    traits:['핵심 역량: 어카운트 매니지먼트','스타일: 관계 중심·빠른 대응','스트레스: 갑작스러운 방향 전환','명언: "모든 것은 커뮤니케이션이다"'],
+    good:['VTSE','DACE'],bad:['VICE','VISP']},
+
+  PRCO:{code:'PRCO',emoji:'🎥',name:'프로덕션 마스터',tag:'"현장에서 모든 것이 결정됩니다"',
+    desc:'이노션 촬영 현장의 신. 전례 없는 촬영 방식도 "방법을 찾겠습니다"로 시작합니다. 대형 글로벌 TVC부터 현장 이벤트까지, 새벽 4시 세팅도 거뜬하고 100명 스태프 밥값도 머릿속에 있습니다.',
+    traits:['핵심 역량: 프로덕션 총괄','스타일: 실행 중심·위기 관리','스트레스: 촬영 중 컨셉 변경','명언: "The show must go on"'],
+    good:['PACE','VTCP'],bad:['VICE','SPFE']},
+
+  SOCO:{code:'SOCO',emoji:'📲',name:'소셜 콘텐츠 크리에이터',tag:'"바이럴은 계획이 아니라 감각입니다"',
+    desc:'트렌드 반응 속도 0.5초. 사람들이 자발적으로 공유하고 참여하게 만드는 콘텐츠 설계가 특기입니다. 밈을 업무에 활용하는 것을 부끄러워하지 않고, "이거 바이럴 될 것 같아요!"가 구호입니다.',
+    traits:['핵심 역량: 콘텐츠 기획·제작','스타일: 빠른 실행·트렌드 감각','스트레스: 긴 승인 프로세스','명언: "Move fast, break things"'],
+    good:['DACE','PACE'],bad:['VISP','BRCO']},
+
+  EVEN:{code:'EVEN',emoji:'🎯',name:'BTL & 익스피리언스 플래너',tag:'"경험이 곧 브랜드입니다"',
+    desc:'오프라인 경험을 예술로 만드는 공간 기획자. 팝업스토어, 브랜드 이벤트, 대형 전시—도면 보며 동선을 상상하고 체험 요소 하나하나에 스토리를 입힙니다. 행사 당일은 수면 불필요 모드로 전환됩니다.',
+    traits:['핵심 역량: BTL·이벤트·공간 기획','스타일: 현장 중심·디테일','스트레스: 날씨와 기자재 불량','명언: "Experience is everything"'],
+    good:['PRCO','PACE'],bad:['DACE','SPFE']},
+
+  NECD:{code:'NECD',emoji:'💻',name:'뉴미디어 크리에이티브',tag:'"새로운 미디어가 나오면 24시간 안에 기획서 씁니다"',
+    desc:'AR·인터랙티브 기술을 광고에 녹여내는 테크-크리에이터. 새 기술이 나오면 가장 먼저 캠페인에 적용할 방법을 찾고, 광고와 엔지니어링 사이 어딘가에 삽니다. 새 플랫폼이 나오면 가장 먼저 이노션 캠페인에 적용하는 방법을 찾습니다.',
+    traits:['핵심 역량: 뉴미디어·인터랙티브','스타일: 실험적·빠른 실행','스트레스: 레거시 프로세스','명언: "Technology is the new canvas"'],
+    good:['COSE','VTCP'],bad:['BRCO','PRCO']},
+
+  BRCO:{code:'BRCO',emoji:'🏛️',name:'브랜드 아이덴티티 수호자',tag:'"브랜드 가이드는 성경입니다"',
+    desc:'이노션 브랜드 아이덴티티의 최후 방어선. 어떤 캠페인에서도 브랜드 에센스가 흔들리지 않도록 지키는 사람. 한 번 정한 컬러는 절대 못 바꾸고, 15년 뒤 브랜드를 지금 설계합니다.',
+    traits:['핵심 역량: 브랜드 전략·BI','스타일: 원칙 수호·장기 관점','스트레스: 브랜드 가이드 무시','명언: "Consistency is credibility"'],
+    good:['STDE','SPFE'],bad:['SOCO','NECD']},
+
+  INCO:{code:'INCO',emoji:'🌟',name:'인플루언서 & 파트너십 플래너',tag:'"사람이 미디어입니다"',
+    desc:'크리에이터 이코노미를 가장 먼저 이해한 이노션의 뉴웨이브. 브랜드와 아이콘을 연결하는 파트너십을 설계합니다. 팔로워 숫자보다 진정성을 보고, 광고주와 크리에이터 사이의 통역사 역할이 천직.',
+    traits:['핵심 역량: 인플루언서·파트너십','스타일: 관계 구축·감도 높은 캐스팅','스트레스: 예산 없는 콜라보 요청','명언: "Authenticity over reach"'],
+    good:['SOCO','PACE'],bad:['VISP','VTSE']},
+
+  NUBI:{code:'NUBI',emoji:'🌱',name:'이노션 뉴비 드리머',tag:'"모르는 게 많아서 오히려 두근두근합니다"',
+    desc:'입사 첫날의 두근거림이 아직도 살아있는 사람. 선배들이 "그건 이미 해봤어"라고 할 때도 "그래도 한번 해봐요!"를 외칩니다. 업계 레전드 캠페인을 볼 때마다 "나도 이런 거 만들고 싶다"를 속삭이는 중. 이 에너지를 5년 후에도 유지하면 진짜 레전드.',
+    traits:['핵심 역량: 빠른 학습·열정','스타일: 스펀지형·질문 폭탄','스트레스: "원래 이래요"라는 말','명언: "모르면 물어보면 된다"'],
+    good:['PACE','VTCP'],bad:['VISP','BRCO']},
+};
+
+/* =====================
+   15 QUESTIONS
+===================== */
+const QS = [
+  {
+    scene:'BRIEF DAY', emoji:'📋',
+    txt:'브리프를 받았다. 제일 먼저 하는 일은?',
+    opts:[
+      {txt:'소비자 데이터와 시장 리서치부터 파고든다. 근거 없이는 방향을 못 잡겠다.',a:'S',b:'D'},
+      {txt:'레퍼런스를 미친 듯이 뒤진다. 뭔가 연결고리가 보일 때까지.',a:'C',b:'V'},
+      {txt:'클라이언트에게 전화해서 진짜로 원하는 게 뭔지 먼저 파악한다.',a:'T',b:'P'},
+    ]
+  },
+  {
+    scene:'IDEA SESSION', emoji:'💡',
+    txt:'아이디에이션 회의. 나는 주로 어떤 스타일인가?',
+    opts:[
+      {txt:'혼자 며칠 파다가 완성된 아이디어 들고 나온다.',a:'I',b:'V'},
+      {txt:'팀원들과 치고받으면서 같이 만들어가는 게 더 잘 된다.',a:'T',b:'C'},
+      {txt:'일단 20개 던지고 그 중에서 추려낸다. 양이 질을 만든다.',a:'E',b:'I'},
+    ]
+  },
+  {
+    scene:'GOOD IDEA', emoji:'🎯',
+    txt:'진짜 좋은 아이디어의 기준은 뭐라고 생각하나?',
+    opts:[
+      {txt:'보는 사람의 감정을 건드리는 것. 기억에 남는 게 최고다.',a:'C',b:'V'},
+      {txt:'목표를 달성하는 것. 아무리 좋아도 결과가 없으면 의미없다.',a:'S',b:'D'},
+      {txt:'아무도 본 적 없는 것. 새로움 자체가 힘이다.',a:'V',b:'C'},
+    ]
+  },
+  {
+    scene:'CLIENT CALL', emoji:'📞',
+    txt:'클라이언트가 완성된 시안에 "임팩트가 부족한 것 같아요"라고 했다.',
+    opts:[
+      {txt:'속으로는 화가 나지만... 일단 어떤 부분이 부족한지 더 물어본다.',a:'T',b:'P'},
+      {txt:'"임팩트의 기준이 뭔지" 바로 되묻는다. 피드백은 구체적이어야 한다.',a:'I',b:'E'},
+      {txt:'일단 알겠다고 하고, 팀으로 돌아와 다시 뜯어본다.',a:'P',b:'T'},
+    ]
+  },
+  {
+    scene:'DEADLINE', emoji:'⏰',
+    txt:'PT 마감 3일 전. 나의 상태는?',
+    opts:[
+      {txt:'이미 이틀 전에 끝냈다. 여유 있게 검토하는 게 내 방식이다.',a:'P',b:'S'},
+      {txt:'마감 전날 밤이 가장 좋은 버전이 나온다. 압박이 나를 살린다.',a:'E',b:'C'},
+      {txt:'70%는 됐고 나머지 30%를 계속 다듬는 중. 완벽에 가까울수록 좋다.',a:'P',b:'V'},
+    ]
+  },
+  {
+    scene:'STRATEGY vs CREATIVE', emoji:'⚖️',
+    txt:'캠페인 방향을 잡을 때. 나에게 더 맞는 건?',
+    opts:[
+      {txt:'전략이 먼저다. 왜 이 방향인지 논리가 서야 크리에이티브도 나온다.',a:'S',b:'D'},
+      {txt:'크리에이티브가 먼저다. 강렬한 표현이 나오면 전략은 따라온다.',a:'C',b:'V'},
+      {txt:'동시에 간다. 전략과 크리에이티브는 따로 존재할 수 없다.',a:'S',b:'C'},
+    ]
+  },
+  {
+    scene:'MEETING ROOM', emoji:'🗣️',
+    txt:'회의에서 내 아이디어가 묻혔다. 나는?',
+    opts:[
+      {txt:'왜 내 아이디어가 더 나은지 끝까지 설득한다.',a:'I',b:'V'},
+      {txt:'다른 방향이 있을 수 있다고 받아들인다. 혼자 답을 가지진 않는다.',a:'T',b:'S'},
+      {txt:'일단 수용하고, 나중에 더 강한 근거를 만들어 다시 꺼낸다.',a:'P',b:'I'},
+    ]
+  },
+  {
+    scene:'DATA vs FEEL', emoji:'📊',
+    txt:'같은 캠페인을 두고 데이터는 A안, 팀의 감은 B안을 가리킨다. 나는?',
+    opts:[
+      {txt:'데이터를 따른다. 감은 틀릴 수 있다.',a:'D',b:'S'},
+      {txt:'팀의 감을 따른다. 데이터가 잡지 못하는 게 있다.',a:'V',b:'C'},
+      {txt:'데이터가 왜 A안인지, 감이 왜 B안인지 둘 다 더 파본다.',a:'S',b:'T'},
+    ]
+  },
+  {
+    scene:'WORK MODE', emoji:'💼',
+    txt:'일하면서 가장 에너지가 올라오는 순간은?',
+    opts:[
+      {txt:'아무도 시도 안 한 아이디어가 PT에서 통했을 때.',a:'V',b:'I'},
+      {txt:'캠페인 수치가 목표를 훌쩍 넘겼을 때 대시보드를 볼 때.',a:'D',b:'T'},
+      {txt:'팀 전체가 같은 방향을 향해 달릴 때. 그 에너지가 좋다.',a:'T',b:'E'},
+    ]
+  },
+  {
+    scene:'NEW PLATFORM', emoji:'🚀',
+    txt:'새로운 미디어나 기술이 나왔다. 나의 반응은?',
+    opts:[
+      {txt:'이걸 캠페인에 어떻게 쓸 수 있을까? 바로 기획이 시작된다.',a:'E',b:'C'},
+      {txt:'시장 반응을 좀 더 지켜보자. 충분히 검증된 후 움직인다.',a:'P',b:'S'},
+      {txt:'직접 써본다. 감을 익혀야 기획도 나온다.',a:'E',b:'V'},
+    ]
+  },
+  {
+    scene:'BRAND VISION', emoji:'🏛️',
+    txt:'브랜드의 장기 방향을 논의하는 자리. 나는?',
+    opts:[
+      {txt:'10년 뒤 브랜드가 어디 있어야 하는지부터 설계한다.',a:'V',b:'S'},
+      {txt:'지금 당장 효과 있는 액션을 만드는 게 먼저다.',a:'D',b:'E'},
+      {txt:'소비자가 이 브랜드를 어떻게 느끼는지부터 이해해야 한다.',a:'S',b:'T'},
+    ]
+  },
+  {
+    scene:'PRODUCTION DAY', emoji:'🎥',
+    txt:'촬영 당일, 현장에서 예상치 못한 변수가 생겼다. 나는?',
+    opts:[
+      {txt:'일단 침착하게. 현장에서 해결책을 찾는 게 더 빠르다.',a:'E',b:'T'},
+      {txt:'원래 계획을 최대한 지키는 방향으로 수습한다.',a:'P',b:'S'},
+      {txt:'관계자들을 모아서 빠르게 합의하고 방향을 재정렬한다.',a:'T',b:'P'},
+    ]
+  },
+  {
+    scene:'GLOBAL MINDSET', emoji:'🌍',
+    txt:'같은 캠페인을 여러 나라에서 동시에 돌려야 한다. 내 접근법은?',
+    opts:[
+      {txt:'나라마다 문화 코드가 다르다. 현지화가 핵심이다.',a:'S',b:'T'},
+      {txt:'크리에이티브의 보편적 감동은 국경을 넘는다. 강한 원본이 먼저다.',a:'C',b:'I'},
+      {txt:'원본의 핵심은 지키되, 현지 뉘앙스를 세심하게 조율한다.',a:'S',b:'C'},
+    ]
+  },
+  {
+    scene:'COLLABORATION', emoji:'🤝',
+    txt:'외부 파트너(감독, 아티스트, 크리에이터)와 협업할 때 나는?',
+    opts:[
+      {txt:'파트너의 색깔을 살리되 브랜드 메시지가 흔들리지 않게 잡는다.',a:'S',b:'T'},
+      {txt:'파트너와 부딪히면서 예상 못한 방향이 나오는 걸 좋아한다.',a:'C',b:'I'},
+      {txt:'파트너를 충분히 이해한 다음, 우리가 원하는 걸 맞춰나간다.',a:'T',b:'P'},
+    ]
+  },
+  {
+    scene:'LEGACY', emoji:'🌟',
+    txt:'이 일을 계속하는 이유, 나의 최종 목표는?',
+    opts:[
+      {txt:'사람들 머릿속에 영원히 남는 크리에이티브를 만드는 것.',a:'V',b:'C'},
+      {txt:'브랜드와 클라이언트의 성장에 진짜로 기여했다고 증명하는 것.',a:'D',b:'S'},
+      {txt:'함께한 팀이 더 좋은 광고인으로 성장하는 것을 보는 것.',a:'T',b:'P'},
+    ]
+  },
+];
+
+/* =====================
+   SCORING
+===================== */
+let sc={}, qi=0, myType=null;
+
+function resetSc(){ sc={V:0,D:0,I:0,T:0,S:0,C:0,E:0,P:0}; }
+
+function calcType(){
+  const v=sc.V>=sc.D?'V':'D';
+  const i=sc.I>=sc.T?'I':'T';
+  const s=sc.S>=sc.C?'S':'C';
+  const e=sc.E>=sc.P?'E':'P';
+  const map={
+    'VISE':'VICE','VISP':'VISP','VICE':'SPFE','VICP':'VTCP',
+    'VTSE':'VTSE','VTSP':'STDE','VTCE':'INCO','VTCP':'VTCP',
+    'DISE':'DACE','DISP':'COSE','DICE':'NECD','DICP':'BRCO',
+    'DTSE':'PRCO','DTSP':'EVEN','DTCE':'SOCO','DTCP':'EVEN',
+  };
+  const res=map[v+i+s+e]||'NUBI';
+  return T[res]?res:'NUBI';
+}
+
+/* =====================
+   SCREENS
+===================== */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+function goIntro(){ show('s-intro'); }
+
+function startQuiz(){
+  resetSc(); qi=0;
+  show('s-quiz'); renderQ();
+}
+
+/* =====================
+   QUIZ
+===================== */
+function renderQ(){
+  const q=QS[qi];
+  document.getElementById('qnum').textContent=qi+1;
+  document.getElementById('prog-f').style.width=(qi/QS.length*100)+'%';
+  document.getElementById('qscene').textContent=q.scene;
+  document.getElementById('qemoji').textContent=q.emoji;
+  document.getElementById('qtxt').textContent=q.txt;
+  const el=document.getElementById('opts');
+  el.innerHTML='';
+  ['A','B','C'].forEach((L,i)=>{
+    if(!q.opts[i]) return;
+    const o=q.opts[i];
+    const b=document.createElement('button');
+    b.className='opt';
+    b.innerHTML=`<span class="opt-l">${L}</span><span>${o.txt}</span>`;
+    b.onclick=()=>pick(o,b);
+    el.appendChild(b);
+  });
+}
+
+function pick(o,btn){
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  sc[o.a]=(sc[o.a]||0)+1;
+  if(o.b) sc[o.b]=(sc[o.b]||0)+0.4;
+  setTimeout(()=>{ qi++; qi>=QS.length?showLoad():renderQ(); },360);
+}
+
+/* =====================
+   LOADING
+===================== */
+const MSGS=['당신의 이노션 DNA 분석 중...','캠페인 성향 측정 중...','16개 유형과 매칭 중...','결과 생성 중...'];
+function showLoad(){
+  show('s-load'); let i=0;
+  const el=document.getElementById('load-msg');
+  const t=setInterval(()=>{ el.textContent=MSGS[i%MSGS.length]; i++; },480);
+  setTimeout(()=>{ clearInterval(t); showResult(); },2100);
+}
+
+/* =====================
+   RESULT
+===================== */
+function showResult(over){
+  const key=over||calcType();
+  myType=key;
+  const t=T[key];
+  document.getElementById('r-code').textContent=t.code;
+  document.getElementById('r-emoji').textContent=t.emoji;
+  document.getElementById('r-name').textContent=t.name;
+  document.getElementById('r-tag').textContent=t.tag;
+  document.getElementById('r-desc').textContent=t.desc;
+
+  document.getElementById('r-traits').innerHTML=t.traits.map(tr=>{
+    const [l,...r]=tr.split(': ');
+    return `<div class="tcard"><div class="tcard-l">${l.toUpperCase()}</div><div class="tcard-v">${r.join(': ')}</div></div>`;
+  }).join('');
+
+  // axes
+  document.getElementById('r-axes').innerHTML=`
+    <div class="sec-eye">성향 분석</div>
+    ${ax('V','D','비전형','데이터형')}
+    ${ax('I','T','독립형','협업형')}
+    ${ax('S','C','전략형','크리에이티브형')}
+    ${ax('E','P','실행형','기획형')}
+  `;
+  setTimeout(()=>{
+    document.querySelectorAll('.axfill').forEach(e=>{e.style.width=e.dataset.p+'%';});
+  },80);
+
+  document.getElementById('r-good').innerHTML=t.good.filter(k=>T[k]).map(k=>`<span class="tg">${T[k].emoji} ${k} · ${T[k].name}</span>`).join('');
+  document.getElementById('r-bad').innerHTML=t.bad.filter(k=>T[k]).map(k=>`<span class="tb">${T[k].emoji} ${k} · ${T[k].name}</span>`).join('');
+
+  const url=location.origin+location.pathname+'?r='+key;
+  document.getElementById('share-url').value=url;
+  show('s-result');
+}
+
+function ax(a,b,la,lb){
+  const tot=(sc[a]||0)+(sc[b]||0)||1;
+  const p=Math.round(((sc[a]||0)/tot)*100);
+  return `<div class="axwrap">
+    <div class="axtop"><span>${la}</span><span>${lb}</span></div>
+    <div class="axtrack"><div class="axfill" data-p="${p}" style="width:0%"></div></div>
+  </div>`;
+}
+
+/* =====================
+   SHARE
+===================== */
+function copyLink(){
+  navigator.clipboard.writeText(document.getElementById('share-url').value).then(()=>{
+    const b=document.getElementById('btn-copy');
+    b.textContent='✓ 복사됨'; b.classList.add('ok');
+    setTimeout(()=>{b.textContent='복사';b.classList.remove('ok');},2000);
+  });
+}
+function shareKakao(){
+  const t=T[myType];
+  const txt=`나의 이노BTI 결과\n${t.emoji} ${t.code} "${t.name}"\n${t.tag}\n\n나는 어떤 이노션 사람일까?\n${document.getElementById('share-url').value}`;
+  navigator.clipboard.writeText(txt).then(()=>alert('복사됐습니다! 카카오톡에 붙여넣기 해주세요 📋'));
+}
+function shareX(){
+  const t=T[myType];
+  const txt=`나의 #이노BTI 결과는 ${t.emoji} ${t.code} "${t.name}" ${t.tag}`;
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(document.getElementById('share-url').value),'_blank');
+}
+
+/* =====================
+   INIT
+===================== */
+document.getElementById('intro-grid').innerHTML=Object.keys(T).map(k=>{
+  const t=T[k];
+  return `<div class="tchip" onclick="viewType('${k}')">
+    <div class="tchip-e">${t.emoji}</div>
+    <div class="tchip-c">${t.code}</div>
+    <div class="tchip-n">${t.name.substring(0,7)}...</div>
+  </div>`;
+}).join('');
+
+function viewType(k){
+  sc={V:0,D:0,I:0,T:0,S:0,C:0,E:0,P:0};
+  k.split('').forEach(c=>{if(sc[c]!==undefined)sc[c]=3;});
+  showResult(k);
+}
+
+const p=new URLSearchParams(location.search).get('r');
+if(p&&T[p]) viewType(p);
+</script>
+</body>
+</html>
